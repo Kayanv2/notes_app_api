@@ -1,10 +1,17 @@
 const express = require("express");
-const router = require("./src/routes");
 const app = express();
 require("./config/database");
+const userRoutes = require("./src/routes/user");
+
+//CONFIGS
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log("server ok");
 });
+
+//ROUTES
+app.post("/register", userRoutes);
