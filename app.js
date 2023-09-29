@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 require("./config/database");
 const userRoutes = require("./src/routes/user");
+const noteRoutes = require("./src/routes/note");
 
 //CONFIGS
 app.use(express.json());
@@ -14,5 +15,5 @@ app.listen(PORT, () => {
 });
 
 //ROUTES
-app.post("/register", userRoutes);
-app.post("/login", userRoutes);
+app.use("/users", userRoutes);
+app.use("/notes", noteRoutes);
