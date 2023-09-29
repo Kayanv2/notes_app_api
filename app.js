@@ -15,3 +15,4 @@ app.listen(PORT, () => {
 
 //ROUTES
 app.post("/register", userRoutes);
+app.post("/login", userRoutes);
