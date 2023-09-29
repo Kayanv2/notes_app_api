@@ -50,4 +50,30 @@ router.get("/", withAuth, async (req, res) => {
   }
 });
 
+//atualizar nota
+router.put("/:id", withAuth, async (req, res) => {
+  try {
+    const { title, body } = req.body;
+    const { id } = req.params;
+
+    let note = await Note.findById(id);
+    if (isOwner(req.user, note)) {
+      const filter = { _id: id };
+      let note = await Note.findOneAndUpdate(
+        filter,
+        {
+          $set: { title: title, body: body },
+        },
+        { upsert: true, new: true }
+      );
+      res.json(note);
+    } else {
+      res.json({ error: "acesso não autorizado" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ error });
+  }
+});
+
 module.exports = router;
