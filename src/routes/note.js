@@ -76,4 +76,22 @@ router.put("/:id", withAuth, async (req, res) => {
   }
 });
 
+//deletar nota
+router.delete("/:id", withAuth, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let note = await Note.findById(id);
+    if (isOwner(req.user, note)) {
+      await note.deleteOne();
+      res.status(204).json({ message: "ok" });
+    } else {
+      res.json("nao autorizado");
+    }
+  } catch (error) {
+    console.log(error);
+    res.json("erro ao deletar a nota");
+  }
+});
+
 module.exports = router;
