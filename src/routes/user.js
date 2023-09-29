@@ -26,14 +26,14 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
       res.status(401).json({ error: "email ou senha incorreta" });
-      console.log(3);
     } else {
       user.isCorrectPassword(password, function (err, same) {
         if (!same) {
           res.status(501).json({ error: "email ou senha incorreta" });
         } else {
-          const token = jwt.sign({ email }, secret, { expiresIn: "10d" });
-          res.json({ user: user, token: token });
+          let token = jwt.sign({ email }, secret, { expiresIn: "10d" });
+
+          res.json({ user: user, token });
         }
       });
     }

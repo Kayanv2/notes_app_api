@@ -16,4 +16,25 @@ router.post("/", withAuth, async (req, res) => {
   }
 });
 
+const isOwner = (user, note) => {
+  if (JSON.stringify(user._id) === JSON.stringify(note.author._id)) {
+    return true;
+  } else {
+    return false;
+  }
+}; //obter notas
+router.get("/:id", withAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    let note = await Note.findById(id);
+    if (isOwner(req.user, note)) {
+      res.json(note);
+    } else {
+      res.status(403).json({ error: "não autorizado" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "erro ao obter as notas" });
+  }
+});
+
 module.exports = router;
