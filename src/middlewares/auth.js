@@ -6,11 +6,9 @@ const User = require("../models/user");
 //verifica se o token é valido
 const withAuth = (req, res, next) => {
   const token = req.headers["token"];
-  console.log(token);
   if (!token) {
     res.status(400).json({ error: "acesso não autorizado" });
   } else {
-    console.log(secret);
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
         res.status(401).json({ err });

@@ -16,13 +16,16 @@ router.post("/", withAuth, async (req, res) => {
   }
 });
 
+// garante que o usuario tem autorização para a nota
 const isOwner = (user, note) => {
   if (JSON.stringify(user._id) === JSON.stringify(note.author._id)) {
     return true;
   } else {
     return false;
   }
-}; //obter notas
+};
+
+//obter nota por id
 router.get("/:id", withAuth, async (req, res) => {
   try {
     const { id } = req.params;
@@ -34,6 +37,16 @@ router.get("/:id", withAuth, async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "erro ao obter as notas" });
+  }
+});
+
+//obter todas as notas
+router.get("/", withAuth, async (req, res) => {
+  try {
+    let notes = await Note.find({ author: req.user._id });
+    res.json({ notes });
+  } catch (err) {
+    res.status(400).json({ error: err });
   }
 });
 
