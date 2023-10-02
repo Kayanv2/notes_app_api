@@ -25,21 +25,6 @@ const isOwner = (user, note) => {
   }
 };
 
-//obter nota por id
-router.get("/:id", withAuth, async (req, res) => {
-  try {
-    const { id } = req.params;
-    let note = await Note.findById(id);
-    if (isOwner(req.user, note)) {
-      res.json(note);
-    } else {
-      res.status(403).json({ error: "não autorizado" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: "erro ao obter as notas" });
-  }
-});
-
 //obter todas as notas
 router.get("/", withAuth, async (req, res) => {
   try {
@@ -94,4 +79,36 @@ router.delete("/:id", withAuth, async (req, res) => {
   }
 });
 
+//pesquisar notas
+router.get("/search", withAuth, async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    let notes = await Note.find({
+      author: req.user._id,
+      $text: { $search: query },
+    });
+
+    res.json(notes);
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error }).status(500);
+  }
+});
+
+//obter nota por id
+router.get("/:id", withAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    let note = await Note.findById(id);
+    if (isOwner(req.user, note)) {
+      res.json(note);
+    } else {
+      res.status(403).json({ error: "não autorizado" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "erro ao obter as notas" });
+  }
+});
 module.exports = router;

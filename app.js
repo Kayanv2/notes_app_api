@@ -3,6 +3,7 @@ const app = express();
 require("./config/database");
 const userRoutes = require("./src/routes/user");
 const noteRoutes = require("./src/routes/note");
+const Note = require("./src/models/note");
 
 //CONFIGS
 app.use(express.json());

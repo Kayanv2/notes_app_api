@@ -8,4 +8,6 @@ let noteSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
+noteSchema.index({ body: "text", title: "text" });
+
 module.exports = mongoose.model("Note", noteSchema);
